@@ -47,16 +47,26 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
     
     return(
         <div className='w-full flex gap-4'>
-            <div className="w-full grid grid-cols-4 px-4 justify-between items-center h-16 rounded-md border border-n-n3 bg-notif hover:border-p-button">
-                <div className='grid grid-cols-5 gap-4 justify-start items-center border-r-2 border-r-p-button'>
-                    <img src={ActiveIcon} className='size-2.5'/>
-                    <p className='capitalize text-n-n2'>{orderStatus}</p>
-                    <p className='text-n-n2 mx-4'>{orderTime}</p>
-                    <p className='text-n-n2 col-span-2  ml-6 font-medium mr-10'>Order #{orderNumber}</p>
+            {/* parent div of the tile itself */}
+            <div className="w-full grid grid-cols-4 items-center px-4 py-3 min-h-16 max-h-auto rounded-md border border-n-n3 bg-notif hover:border-p-button">
+                {/* left section - icon, order status, time, and number */}
+                <div className='flex items-center py-3 border-r-2 border-r-p-button'>
+                    {/* icon div */}
+                    <div className='shrink-0 laptop:mr-6 tablet:mr-5 mr-4'>
+                        <img src={ActiveIcon} className='size-2.5'/>
+                    </div>
+                    {/* order status, time, number */}
+                    <div className='flex flex-wrap items-center mx-auto laptop:gap-5 tablet:gap-3 gap-2'>
+                        <p className='capitalize text-n-n2'>{orderStatus}</p>
+                        <p className='text-n-n2'>{orderTime}</p>
+                        <p className='text-n-n2 font-medium'>Order #{orderNumber}</p>
+                    </div>
                 </div>
+                {/* main order info content */}
                 <div className='col-span-2'>
                     {displayOrderInfo()}                    
                 </div>
+                {/* view order button section */}
                 <div>
                     <Button
                         text="View Order"
