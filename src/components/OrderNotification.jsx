@@ -44,6 +44,14 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
         }
 
     };
+
+    // dynamic button text variable depending on whether the popup is open or not
+    let buttonText;
+    if (popupOpen == true){
+        buttonText = "Hide Order";
+    } else {
+        buttonText = "View Order";
+    }
     
     return(
         <div className='w-full flex gap-4'>
@@ -67,12 +75,14 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
                     {displayOrderInfo()}                    
                 </div>
                 {/* view order button section */}
-                <div>
-                    <Button
-                        text="View Order"
-                        className="min-w-full bg-p-button3 hover:border-p-button3 hover:text-p-button3 hover:bg-n-n7"
-                        onClick={toggleOrderPopup}
-                    />   
+                <div className='flex w-full items-center justify-center border-x-2'>
+                    <div className='w-full'>
+                        <Button
+                            text={buttonText}
+                            className="min-w-full bg-p-button3 hover:border-p-button3 hover:text-p-button3 hover:bg-n-n7"
+                            onClick={toggleOrderPopup}
+                        />  
+                    </div> 
                 </div>
             </div>
             <div>
