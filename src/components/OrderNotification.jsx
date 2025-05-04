@@ -54,7 +54,8 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
     }
     
     return(
-        <div className='w-full flex gap-4'>
+        // div controls both notification tile and popup behavior
+        <div className='w-full flex flex-col md:flex-row gap-4'>
             {/* parent div of the tile itself */}
             <div className="w-full grid grid-cols-4 items-center px-4 py-3 min-h-16 max-h-[160px] rounded-md border border-n-n3 bg-notif hover:border-p-button">
                 {/* left section - icon, order status, time, and number */}
@@ -75,7 +76,7 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
                     {displayOrderInfo()}                    
                 </div>
                 {/* view order button section */}
-                <div className='flex w-full items-center justify-center border-x-2'>
+                <div className='flex w-full items-center justify-center'>
                     <div className='w-full'>
                         <Button
                             text={buttonText}
@@ -85,7 +86,8 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
                     </div> 
                 </div>
             </div>
-            <div>
+            {/* parent div of the popup */}
+            <div className='flex justify-center border-x-2'>
                 {popupOpen && (
                         <OrderPopup
                             customerName={customerName}
