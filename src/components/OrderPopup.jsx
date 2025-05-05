@@ -33,14 +33,17 @@ const OrderPopup = ({customerName, orderName, orderNumber, orderQuantity, orderP
                 
 
                 {orderStatus === "ongoing" && (
-                    <div>
-                        <h2 className='text-xl font-normal text-p-button'>Order Details: #{orderNumber}</h2>
-                        <p className='font-medium mt-2 text-n-n1'>Order #{orderNumber} is being delivered to {customerName}.</p>
-                        <p className="font-medium mt-4 text-n-n2">Order Summary:</p>
-                        <p className='text-n-n2'>Dish: {orderName}</p>
-                        <p className='text-n-n2'>Quantity: {orderQuantity}x</p>
-                        <p className='text-n-n2'>Total: £{orderPrice}</p><br/>
-                        <p className='text-n-n2'>Take the next step to complete the order.</p>
+                    // section with order details
+                    <div className='font-normal w-full text-center md:text-left'>
+                        <h2 className='text-xl font-semibold text-p-button'>Order Details: #{orderNumber}</h2>
+                        <p className='text-sm sm:text-base md:text-sm font-medium mt-2 text-n-n1'>Order #{orderNumber} is being delivered to {customerName}.</p>
+                        <p className="text-sm sm:text-lg md:text-base font-medium mt-4 text-n-n1">Order Summary:</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p><br/>
+                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Take the next step to complete the order.</p>
+
+                        {/* section with button */}
                         <div className='mt-4 flex justify-center'>
                             <Button
                             text="Complete Delivery"
@@ -52,15 +55,18 @@ const OrderPopup = ({customerName, orderName, orderNumber, orderQuantity, orderP
                     </div>             
                 )}
                 {orderStatus === "delivered" && (
-                    <div>
-                        <h2 className='text-xl font-normal text-p-button'>Order Details: #{orderNumber}</h2>
-                        <p className='font-medium mt-2 text-n-n1'>Order #{orderNumber} was delivered to {customerName}, and your service was outstanding!</p>
-                        <p className="font-medium mt-4 text-n-n2">Order Summary:</p>
-                        <p className='text-n-n2'>Dish: {orderName}</p>
-                        <p className='text-n-n2'>Quantity: {orderQuantity}x</p>
-                        <p className='text-n-n2'>Total: £{orderPrice}</p>
-                        <p className='text-n-n2'>Delivery Time: {deliveryTime}</p><br/>
-                        <p className='text-n-n2'>Thank you for your commitment to great service!</p>
+                    // section with order details
+                    <div className='font-normal w-full text-center md:text-left'>
+                        <h2 className='text-xl font-semibold text-p-button'>Order Details: #{orderNumber}</h2>
+                        <p className='text-sm sm:text-base md:text-sm font-medium mt-2 text-n-n1'>Order #{orderNumber} was delivered to {customerName}, and your service was outstanding!</p>
+                        <p className="text-sm sm:text-lg md:text-base font-medium mt-4 text-n-n2">Order Summary:</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Delivery Time:</span> {deliveryTime}</p><br/>
+                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Thank you for your commitment to great service!</p>
+
+                        {/* section with button */}
                         <div className='mt-4 flex justify-center'>
                             <Button
                             text="View Order History"

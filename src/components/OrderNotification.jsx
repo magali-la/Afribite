@@ -87,7 +87,7 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
                 </div>
             </div>
             {/* parent div of the popup */}
-            <div className='flex justify-center border-x-2'>
+            <div className='flex justify-center'>
                 {popupOpen && (
                         <OrderPopup
                             customerName={customerName}
