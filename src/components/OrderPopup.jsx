@@ -1,7 +1,12 @@
 import React, {useState} from 'react';
 import Button from "./button";
 
-const OrderPopup = ({customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, updateOrderStatus, deliveryTime }) => {
+const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, updateOrderStatus, deliveryTime }) => {
+
+    // this handles the order status change through firestore
+    const updateOrderStatus = (newStatus) => {
+        console.log(`Updating order status to: ${newStatus}`);
+    };
     
     return (
         popupOpen && (

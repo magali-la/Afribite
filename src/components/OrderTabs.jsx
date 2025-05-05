@@ -12,6 +12,7 @@ const OrderTabs = ({orders}) => {
             content: orders.filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'new').map(order => (
                 <OrderNotification
                     key={order.id}
+                    id={order.id}
                     orderStatus={order.orderStatus}
                     orderTime={order.orderTime}
                     customerName={order.customerName}
@@ -30,6 +31,7 @@ const OrderTabs = ({orders}) => {
                 .filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'ongoing').map(order => (
                     <OrderNotification
                         key={order.id}
+                        id={order.id}
                         orderStatus={order.orderStatus}
                         orderTime={order.orderTime}
                         customerName={order.customerName}
@@ -47,6 +49,7 @@ const OrderTabs = ({orders}) => {
                 .filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'delivered').map(order => (
                     <OrderNotification
                         key={order.id}
+                        id={order.id}
                         orderStatus={order.orderStatus}
                         orderTime={order.orderTime}
                         customerName={order.customerName}

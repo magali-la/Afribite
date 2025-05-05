@@ -5,16 +5,12 @@ import Button from './button.jsx';
 import OrderPopup from './OrderPopup.jsx';
 
 
-const OrderNotification = ({orderStatus, orderTime, customerName, orderName, orderQuantity, orderPrice, deliveryTime, orderNumber}) => {
+const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName, orderQuantity, orderPrice, deliveryTime, orderNumber}) => {
     const [popupOpen, setPopupOpen] = useState(false)
 
     const toggleOrderPopup = () => {
         setPopupOpen(!popupOpen);
       };
-
-    const updateOrderStatus = (newStatus) => {
-        console.log(`Updating order status to: ${newStatus}`);
-    };
 
     const displayOrderInfo = () => {
         switch(orderStatus.toLowerCase()) {
@@ -90,6 +86,7 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
             <div className='flex justify-center'>
                 {popupOpen && (
                         <OrderPopup
+                            id={id}
                             customerName={customerName}
                             orderName={orderName}
                             orderNumber={orderNumber}
@@ -98,7 +95,6 @@ const OrderNotification = ({orderStatus, orderTime, customerName, orderName, ord
                             popupOpen={popupOpen}
                             toggleOrderPopup={toggleOrderPopup}
                             orderStatus={orderStatus}
-                            updateOrderStatus={updateOrderStatus}
                             deliveryTime={deliveryTime}
                         />
                 )}
