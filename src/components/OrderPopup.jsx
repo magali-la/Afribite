@@ -1,11 +1,30 @@
 import React, {useState} from 'react';
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase"; 
 import Button from "./button";
 
-const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, updateOrderStatus, deliveryTime }) => {
+const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, deliveryTime }) => {
 
     // this handles the order status change through firestore
-    const updateOrderStatus = (newStatus) => {
+    const advanceOrderStatus = async (newStatus) => {
         console.log(`Updating order status to: ${newStatus}`);
+
+        const currentOrder = doc(db, 'orders', id);
+
+        // conditions to determine how the order will be updated based on orderStatus
+        if (orderStatus == "new"){
+            // update the status to ongoing
+            await updateDoc(currentOrder, {orderStatus: "ongoing"});
+            console.log(`Order ${id} successfully updated to ${newStatus}`);
+
+        } else if (orderStatus == "ongoing"){
+            // update the status to delivered
+            await updateDoc(currentOrder, {orderStatus: "delivered"});
+            console.log(`Order ${id} successfully updated to ${newStatus}`);
+        }
+
+        // close the popup
+        toggleOrderPopup();
     };
     
     return (
@@ -30,7 +49,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             <Button 
                                 text="Ready for Pickup"
                                 className="bg-accent text-notif rounded-lg font-medium"
-                                onClick={() => updateOrderStatus("ongoing")}
+                                onClick={() => advanceOrderStatus("ongoing")}
                             />
                         </div>
                     </div>
@@ -53,7 +72,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             <Button
                             text="Complete Delivery"
                             className="bg-accent text-notif text-lg p-4 rounded-lg font-medium"
-                            onClick={() => updateOrderStatus("delivered")}
+                            onClick={() => advanceOrderStatus("delivered")}
                             />   
                         </div>
                         
