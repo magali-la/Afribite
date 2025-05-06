@@ -3,7 +3,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase"; 
 import Button from "./button";
 
-const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, deliveryTime }) => {
+const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, deliveryTime, refreshOrders}) => {
 
     // this handles the order status change through firestore
     const advanceOrderStatus = async (newStatus) => {
@@ -25,6 +25,8 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
 
         // close the popup
         toggleOrderPopup();
+        // refresh the orders data to immediately update UI
+        refreshOrders();
     };
     
     return (

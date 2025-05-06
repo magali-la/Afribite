@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import OrderNotification from './OrderNotification';
 
-const OrderTabs = ({orders}) => {
+const OrderTabs = ({orders, refreshOrders}) => {
     console.log("Orders received in OrderTabs:", orders);
 
     const [activeTab, setActiveTab] = useState(0);
@@ -21,6 +21,7 @@ const OrderTabs = ({orders}) => {
                     orderPrice={order.orderPrice}
                     deliveryTime={order.deliveryTime}
                     orderNumber={order.orderNumber}
+                    refreshOrders={refreshOrders}
                 />
             ) ),
             
@@ -40,6 +41,7 @@ const OrderTabs = ({orders}) => {
                         orderPrice={order.orderPrice}
                         deliveryTime={order.deliveryTime}
                         orderNumber={order.orderNumber}
+                        refreshOrders={refreshOrders}
                     />
                 )),
         },
@@ -58,6 +60,7 @@ const OrderTabs = ({orders}) => {
                         orderPrice={order.orderPrice}
                         deliveryTime={order.deliveryTime}
                         orderNumber={order.orderNumber}
+                        refreshOrders={refreshOrders}
                     />
                 )),
         },

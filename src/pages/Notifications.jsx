@@ -6,22 +6,26 @@ import OrderTabs from "../components/OrderTabs.jsx";
 function Notifications() {
   const [orders, setOrders] = useState([]);
 
+  // function that fetches orders from Firestore
+  const getOrderData = async () => {
+    const db = getFirestore();
+    const ordersRef = collection(db, "orders");
+    const ordersSnapshot = await getDocs(ordersRef);
+
+    // build an array with the orders data
+    const ordersList = ordersSnapshot.docs.map((doc) => ({   id:doc.id,
+      ...doc.data(),
+    }));
+
+    // sort the orders array descending by order number
+    ordersList.sort((a, b) => b.orderNumber - a.orderNumber); 
+
+    console.log("Fetched Orders:", ordersList);
+    setOrders(ordersList);
+  };
+
   useEffect(() => {
-    const getOrderData = async () => {
-      const db = getFirestore();
-      const ordersRef = collection(db, "orders");
-      const ordersSnapshot = await getDocs(ordersRef);
-      const ordersList = ordersSnapshot.docs.map((doc) => ({   id:doc.id,
-        ...doc.data(),
-      }));
-
-      ordersList.sort((a, b) => b.orderNumber - a.orderNumber); 
-
-      console.log("Fetched Orders:", ordersList);
-      setOrders(ordersList);
-    };
     getOrderData();
-
   }, []);
 
   console.log("orders before going to order tab:", orders);
@@ -37,7 +41,9 @@ function Notifications() {
       </div>
       {/* tabs and notificatons */}
       <div className="w-full flex-grow">
-        <OrderTabs orders={orders}/>
+        <OrderTabs 
+          orders={orders} 
+          refreshOrders={getOrderData}/>
       </div>
     </div>
   );
