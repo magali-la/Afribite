@@ -31,7 +31,7 @@ const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName,
             case 'delivered':
                 return (
                     <div className='w-full grid grid-cols-5 items-center'>
-                        <p className='w-full col-span-4 ml-2 pr-2 sm:break-normal text-n-n1 font-semibold'>{customerName}'s order was delivered at: {deliveryTime}</p>
+                        <p className='w-full col-span-4 ml-2 pr-2 sm:break-normal text-n-n1 font-semibold'>{customerName}'s order was delivered at: {formatTileDeliveryTime(deliveryTime)}</p>
                         <p className='w-full text-right font-medium text-n-n2'>Total: £{orderPrice}</p>
                     </div>
                 );
@@ -48,6 +48,19 @@ const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName,
     } else {
         buttonText = "View Order";
     }
+
+    // function to format the server timestamp in firestore for UI in tile
+    const formatTileDeliveryTime = (timestamp) => {
+        // define a variable for the date delivered
+        let date = timestamp.toDate();
+
+        // customize UK time format options
+        let tileTimeOptions = {hour: 'numeric', minute: '2-digit'};
+
+        // return a string format with the full date and time to place in the UI
+        return date.toLocaleTimeString('en-GB', tileTimeOptions)
+
+    };
     
     return(
         // div controls both notification tile and popup behavior

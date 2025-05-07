@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase"; 
 import Button from "./button";
 
@@ -18,8 +18,8 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
             console.log(`Order ${id} successfully updated to ${newStatus}`);
 
         } else if (orderStatus == "ongoing"){
-            // update the status to delivered
-            await updateDoc(currentOrder, {orderStatus: "delivered"});
+            // update the status to delivered and update the timestamp
+            await updateDoc(currentOrder, {orderStatus: "delivered", deliveryTime: serverTimestamp()});
             console.log(`Order ${id} successfully updated to ${newStatus}`);
         }
 
@@ -29,29 +29,43 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
         refreshOrders();
     };
 
-        // this handles reversing the order status change through firestore
-        const revertOrderStatus = async (newStatus) => {
-            console.log(`Reversing order status to: ${newStatus}`);
-    
-            const currentOrder = doc(db, 'orders', id);
-    
-            // conditions to determine how the order will be updated based on orderStatus
-            if (orderStatus == "ongoing"){
-                // update the status to ongoing
-                await updateDoc(currentOrder, {orderStatus: "new"});
-                console.log(`Order ${id} successfully reverted to ${newStatus}`);
-    
-            } else if (orderStatus == "delivered"){
-                // update the status to delivered
-                await updateDoc(currentOrder, {orderStatus: "ongoing"});
-                console.log(`Order ${id} successfully reverted to ${newStatus}`);
-            }
-    
-            // close the popup
-            toggleOrderPopup();
-            // refresh the orders data to immediately update UI
-            refreshOrders();
-        };
+    // this handles reversing the order status change through firestore
+    const revertOrderStatus = async (newStatus) => {
+        console.log(`Reversing order status to: ${newStatus}`);
+
+        const currentOrder = doc(db, 'orders', id);
+
+        // conditions to determine how the order will be updated based on orderStatus
+        if (orderStatus == "ongoing"){
+            // revert the status back to new
+            await updateDoc(currentOrder, {orderStatus: "new"});
+            console.log(`Order ${id} successfully reverted to ${newStatus}`);
+
+        } else if (orderStatus == "delivered"){
+            // revert the status back to ongoing and remove the timestamp
+            await updateDoc(currentOrder, {orderStatus: "ongoing", deliveryTime: null});
+            console.log(`Order ${id} successfully reverted to ${newStatus}`);
+        }
+
+        // close the popup
+        toggleOrderPopup();
+        // refresh the orders data to immediately update UI
+        refreshOrders();
+    };
+
+    // function to format the server timestamp in firestore for UI in popup
+    const formatPopupDeliveryTime = (timestamp) => {
+        // define a variable for the date delivered
+        let date = timestamp.toDate();
+
+        // customize UK date and time format options
+        let popupDateOptions = {day: 'numeric', month: 'short', year: 'numeric'};
+        let popupTimeOptions = {hour: 'numeric', minute: '2-digit'};
+
+        // return a string format with the full date and time to place in the UI
+        return `${date.toLocaleDateString('en-GB', popupDateOptions)} at ${date.toLocaleTimeString('en-GB', popupTimeOptions)}`
+
+    };
     
     return (
         popupOpen && (
@@ -121,7 +135,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p>
-                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Delivery Time:</span> {deliveryTime}</p><br/>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Delivery Time:</span> {formatPopupDeliveryTime(deliveryTime)}</p><br/>
                         <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Thank you for your commitment to great service!</p>
 
                         {/* section with button */}
