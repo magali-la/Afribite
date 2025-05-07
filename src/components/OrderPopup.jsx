@@ -28,6 +28,30 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
         // refresh the orders data to immediately update UI
         refreshOrders();
     };
+
+        // this handles reversing the order status change through firestore
+        const revertOrderStatus = async (newStatus) => {
+            console.log(`Reversing order status to: ${newStatus}`);
+    
+            const currentOrder = doc(db, 'orders', id);
+    
+            // conditions to determine how the order will be updated based on orderStatus
+            if (orderStatus == "ongoing"){
+                // update the status to ongoing
+                await updateDoc(currentOrder, {orderStatus: "new"});
+                console.log(`Order ${id} successfully reverted to ${newStatus}`);
+    
+            } else if (orderStatus == "delivered"){
+                // update the status to delivered
+                await updateDoc(currentOrder, {orderStatus: "ongoing"});
+                console.log(`Order ${id} successfully reverted to ${newStatus}`);
+            }
+    
+            // close the popup
+            toggleOrderPopup();
+            // refresh the orders data to immediately update UI
+            refreshOrders();
+        };
     
     return (
         popupOpen && (
@@ -47,10 +71,10 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                         <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Update Order Status once it's Ready for Pickup.</p>
                     
                         {/* section with button */}
-                        <div className='mt-4 flex justify-center'>
+                        <div className='mt-4 text-center'>
                             <Button 
                                 text="Ready for Pickup"
-                                className="bg-accent text-notif rounded-lg font-medium"
+                                className="w-4/5 p-4 bg-accent text-notif rounded-lg font-medium"
                                 onClick={() => advanceOrderStatus("ongoing")}
                             />
                         </div>
@@ -69,13 +93,21 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p><br/>
                         <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Take the next step to complete the order.</p>
 
-                        {/* section with button */}
-                        <div className='mt-4 flex justify-center'>
+                        {/* section with buttons */}
+                        <div className='mt-4 grid grid-rows-2 text-center items-center gap-0.5'>
+                            {/* button to update status */}
                             <Button
                             text="Complete Delivery"
-                            className="bg-accent text-notif text-lg p-4 rounded-lg font-medium"
+                            className="w-4/5 bg-accent text-notif text-lg p-4 rounded-lg font-medium"
                             onClick={() => advanceOrderStatus("delivered")}
-                            />   
+                            />
+
+                            {/* button to reverse status */}
+                            <Button
+                            text="Reverse Status"
+                            className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
+                            onClick={() => revertOrderStatus("new")}
+                            />
                         </div>
                         
                     </div>             
@@ -93,10 +125,13 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                         <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Thank you for your commitment to great service!</p>
 
                         {/* section with button */}
-                        <div className='mt-4 flex justify-center'>
+                        <div className='mt-4 grid text-center'>
                             <Button
-                            text="View Order History"
-                            className="bg-accent text-notif text-lg p-4 rounded-lg font-medium"
+                            text="Reverse Status"
+                            className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
+
+                            // option to revert order status
+                            onClick={() => revertOrderStatus("ongoing")}
                             />
                         </div>
                         
