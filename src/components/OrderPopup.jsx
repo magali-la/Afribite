@@ -13,6 +13,11 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
 
         // conditions to determine how the order will be updated based on orderStatus
         if (orderStatus == "new"){
+            // update the status to kitchen
+            await updateDoc(currentOrder, {orderStatus: "kitchen"});
+            console.log(`Order ${id} successfully updated to ${newStatus}`);
+
+        } else if (orderStatus == "kitchen"){ 
             // update the status to ongoing
             await updateDoc(currentOrder, {orderStatus: "ongoing"});
             console.log(`Order ${id} successfully updated to ${newStatus}`);
@@ -36,9 +41,14 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
         const currentOrder = doc(db, 'orders', id);
 
         // conditions to determine how the order will be updated based on orderStatus
-        if (orderStatus == "ongoing"){
+        if (orderStatus == "kitchen"){
             // revert the status back to new
             await updateDoc(currentOrder, {orderStatus: "new"});
+            console.log(`Order ${id} successfully reverted to ${newStatus}`);
+
+        } else if (orderStatus == "ongoing"){
+            // revert the status back to kitchen
+            await updateDoc(currentOrder, {orderStatus: "kitchen"});
             console.log(`Order ${id} successfully reverted to ${newStatus}`);
 
         } else if (orderStatus == "delivered"){
@@ -72,6 +82,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
         <div className="flex flex-col justify-center items-center w-[85%] sm:w-[80%] md:w-[300px] lg:max-w-[350px] xl:w-[400px] 2xl:w-[500px] bg-notif border-2 border-terra-cotta text-n-n1 gap-y-5 py-[21px] px-[23px] rounded-lg leading-5">
             {/* div that holds the popup text and button */}
             <div className="flex w-full text-n-n1">
+                {/* popup for new orders */}
                 {orderStatus === "new" && (
                     // section with order details
                     <div className='font-normal w-full text-center md:text-left'>
@@ -81,21 +92,52 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
                         <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p><br/>
-                        <p className='text-sm sm:text-base md:text-sm italic text-n-n2'>Please Start Preparing the Order.</p><br/>
-                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Update Order Status once it's Ready for Pickup.</p>
+                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Accept this order to begin preparing.</p>
                     
                         {/* section with button */}
                         <div className='mt-4 text-center'>
                             <Button 
-                                text="Ready for Pickup"
+                                text="Accept Order"
                                 className="w-4/5 p-4 bg-accent text-notif rounded-lg font-medium"
-                                onClick={() => advanceOrderStatus("ongoing")}
+                                onClick={() => advanceOrderStatus("kitchen")}
                             />
                         </div>
                     </div>
                 )}
-                
 
+                {/* popup for cooking orders */}
+                {orderStatus === "kitchen" && (
+                    // section with order details
+                    <div className='font-normal w-full text-center md:text-left'>
+                        <h2 className='text-xl font-semibold text-p-button'>Order Details: #{orderNumber}</h2>
+                        <p className='text-sm sm:text-base md:text-sm font-medium mt-2 text-n-n1'>Order #{orderNumber} is being prepared for {customerName}.</p>
+                        <p className="text-sm sm:text-lg md:text-base font-medium mt-4 text-n-n1">Order Summary:</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p><br/>
+                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Take the next step to start delivery.</p>
+
+                        {/* section with buttons */}
+                        <div className='mt-4 grid grid-rows-2 text-center items-center gap-0.5'>
+                            {/* button to update status */}
+                            <Button
+                            text="Ready for Pickup"
+                            className="w-4/5 bg-accent text-notif text-lg p-4 rounded-lg font-medium"
+                            onClick={() => advanceOrderStatus("ongoing")}
+                            />
+
+                            {/* button to reverse status */}
+                            <Button
+                            text="Reverse Status"
+                            className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
+                            onClick={() => revertOrderStatus("new")}
+                            />
+                        </div>
+                        
+                    </div>             
+                )}
+                
+                {/* popup for orders out for delivery */}
                 {orderStatus === "ongoing" && (
                     // section with order details
                     <div className='font-normal w-full text-center md:text-left'>
@@ -120,12 +162,14 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             <Button
                             text="Reverse Status"
                             className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
-                            onClick={() => revertOrderStatus("new")}
+                            onClick={() => revertOrderStatus("kitchen")}
                             />
                         </div>
                         
                     </div>             
                 )}
+
+                {/* popup for delivered orders */}
                 {orderStatus === "delivered" && (
                     // section with order details
                     <div className='font-normal w-full text-center md:text-left'>
