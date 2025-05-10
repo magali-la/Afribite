@@ -97,16 +97,18 @@ const OrderTabs = ({orders, refreshOrders}) => {
     return (
         <div className='grid grid-cols-1 gap-8 h-full w-full rounded-lg'>
             {/* tabs */}
-            <div className='flex flex-row gap-12'>
-                {tabs.map((tab,index) => (
-                    <button
-                        key={index}
-                        className={`${activeTab === index 
-                            ? 'border-b-2 font-semibold border-p-button text-p-button' : ''}`}
-                        onClick={() => setActiveTab(index)}>
-                            {tab.title}
-                    </button>
-                ))}
+            <div className='overflow-x-auto scrollbar-hide'>
+                <div className='flex flex-row gap-12'>
+                    {tabs.map((tab,index) => (
+                        <button
+                            key={index}
+                            className={`${activeTab === index 
+                                ? 'border-b-2 font-semibold border-p-button text-p-button' : ''}`}
+                            onClick={() => setActiveTab(index)}>
+                                {tab.title}
+                        </button>
+                    ))}
+                </div>
             </div>
             {/* order notifications */}
             <div className='space-y-4'>
