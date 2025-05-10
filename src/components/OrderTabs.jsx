@@ -48,12 +48,31 @@ const OrderTabs = ({orders, refreshOrders}) => {
             ) ),
             
         },
+
+        // Orders ready for pickup tab
+        {
+            title: 'Pickup Pending',
+            content: orders.filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'pickup').map(order => (
+                <OrderNotification
+                    key={order.id}
+                    id={order.id}
+                    orderStatus={order.orderStatus}
+                    orderTime={order.orderTime}
+                    customerName={order.customerName}
+                    orderName={order.orderName}
+                    orderQuantity={order.orderQuantity}
+                    orderPrice={order.orderPrice}
+                    deliveryTime={order.deliveryTime}
+                    orderNumber={order.orderNumber}
+                    refreshOrders={refreshOrders}
+                />
+            )),
+        },
         
         // Orders out for delivery tab
         {
             title: 'Out for Delivery',
-            content: orders
-                .filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'ongoing').map(order => (
+            content: orders.filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'ongoing').map(order => (
                     <OrderNotification
                         key={order.id}
                         id={order.id}
@@ -73,8 +92,7 @@ const OrderTabs = ({orders, refreshOrders}) => {
         // Orders delivered tab
         {
             title: 'Delivered',
-            content: orders
-                .filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'delivered').map(order => (
+            content: orders.filter(order => order && order.orderStatus && order.orderStatus.toLowerCase() === 'delivered').map(order => (
                     <OrderNotification
                         key={order.id}
                         id={order.id}

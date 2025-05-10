@@ -19,6 +19,11 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
 
         } else if (orderStatus == "kitchen"){ 
             // update the status to ongoing
+            await updateDoc(currentOrder, {orderStatus: "pickup"});
+            console.log(`Order ${id} successfully updated to ${newStatus}`);
+
+        } else if (orderStatus == "pickup"){ 
+            // update the status to ongoing
             await updateDoc(currentOrder, {orderStatus: "ongoing"});
             console.log(`Order ${id} successfully updated to ${newStatus}`);
 
@@ -46,9 +51,14 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
             await updateDoc(currentOrder, {orderStatus: "new"});
             console.log(`Order ${id} successfully reverted to ${newStatus}`);
 
-        } else if (orderStatus == "ongoing"){
+        } else if (orderStatus == "pickup"){
             // revert the status back to kitchen
             await updateDoc(currentOrder, {orderStatus: "kitchen"});
+            console.log(`Order ${id} successfully reverted to ${newStatus}`);
+
+        } else if (orderStatus == "ongoing"){
+            // revert the status back to kitchen
+            await updateDoc(currentOrder, {orderStatus: "pickup"});
             console.log(`Order ${id} successfully reverted to ${newStatus}`);
 
         } else if (orderStatus == "delivered"){
@@ -123,7 +133,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             <Button
                             text="Ready for Pickup"
                             className="w-4/5 bg-accent text-notif text-lg p-4 rounded-lg font-medium"
-                            onClick={() => advanceOrderStatus("ongoing")}
+                            onClick={() => advanceOrderStatus("pickup")}
                             />
 
                             {/* button to reverse status */}
@@ -131,6 +141,38 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             text="Reverse Status"
                             className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
                             onClick={() => revertOrderStatus("new")}
+                            />
+                        </div>
+                        
+                    </div>             
+                )}
+
+                {/* popup for orders ready for pickup */}
+                {orderStatus === "pickup" && (
+                    // section with order details
+                    <div className='font-normal w-full text-center md:text-left'>
+                        <h2 className='text-xl font-semibold text-p-button'>Order Details: #{orderNumber}</h2>
+                        <p className='text-sm sm:text-base md:text-sm font-medium mt-2 text-n-n1'>Order #{orderNumber} for {customerName} is ready for pickup.</p>
+                        <p className="text-sm sm:text-lg md:text-base font-medium mt-4 text-n-n1">Order Summary:</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Dish:</span> {orderName}</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Quantity:</span> {orderQuantity}x</p>
+                        <p className='text-sm sm:text-lg md:text-base font-semibold text-n-n1'><span className='font-medium text-n-n2'>Total:</span> £{orderPrice}</p><br/>
+                        <p className='text-sm sm:text-base md:text-sm font-medium text-n-n2'>Take the next step once the order has been picked up.</p>
+
+                        {/* section with buttons */}
+                        <div className='mt-4 grid grid-rows-2 text-center items-center gap-0.5'>
+                            {/* button to update status */}
+                            <Button
+                            text="Start Delivery"
+                            className="w-4/5 bg-accent text-notif text-lg p-4 rounded-lg font-medium"
+                            onClick={() => advanceOrderStatus("ongoing")}
+                            />
+
+                            {/* button to reverse status */}
+                            <Button
+                            text="Reverse Status"
+                            className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
+                            onClick={() => revertOrderStatus("kitchen")}
                             />
                         </div>
                         
@@ -162,7 +204,7 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
                             <Button
                             text="Reverse Status"
                             className="w-4/5 bg-p-button5 text-p-button3 hover:text-p-button3 hover:border-p-button3 hover:font-medium text-lg p-2 rounded-lg font-normal"
-                            onClick={() => revertOrderStatus("kitchen")}
+                            onClick={() => revertOrderStatus("pickup")}
                             />
                         </div>
                         

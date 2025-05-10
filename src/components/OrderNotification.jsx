@@ -28,6 +28,13 @@ const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName,
                         <p className='w-full text-right font-medium text-n-n2'>Total: £{orderPrice}</p>
                     </div>
                 )
+            case 'pickup':
+                return (
+                    <div className='w-full grid grid-cols-5 items-center'>
+                        <p className='w-full col-span-4 ml-2 pr-2 sm:break-normal text-n-n1 font-semibold'>{orderName} ({orderQuantity}x) for {customerName} is ready for pickup</p>
+                        <p className='w-full text-right font-medium text-n-n2'>Total: £{orderPrice}</p>
+                    </div>
+                )
             case 'ongoing':
                 return (
                     <div className='w-full grid grid-cols-5 items-center'>
