@@ -104,8 +104,8 @@ function Notifications() {
     <div className="bg-eggshell rounded-lg p-4 flex flex-col w-full min-h-svh gap-8">
       {/* title and search */}
       <div className="flex flex-row">
-        <div className="flex justify-between w-full">
-          <h1 className="text-4xl text-terra-cotta">Order Notifications</h1>
+        <div className="flex flex-col sm:flex-row justify-between w-full">
+          <h1 className="text-4xl mb-4 sm:mb-0 text-terra-cotta">Order Notifications</h1>
           <OrderSearch
             setSearchTerm={setSearchTerm}
             handleSearch={handleSearch}
@@ -115,10 +115,10 @@ function Notifications() {
 
       {/* conditional render of search results */}
       {isSearching && (
-        <div className="border-2 border-p-button3 w-full h-[30%]">
+        <div className="border-2 rounded-md pb-4 border-p-button3 p-1 w-full h-[30%]">
           {/* section with header and clear button */}
           <div className="flex flex-row justify-between">
-            <h3 className="text-xl text-left mr-4 text-p-button3">Search results for: <span className="italic font-light">'{searchTerm}'</span></h3>
+            <h3 className="text-xl text-left mr-4 mb-2 text-p-button3">Search results for: <span className="italic font-light">'{searchTerm}'</span></h3>
             {/* button section */}
             <div>
               <Button 
@@ -130,7 +130,7 @@ function Notifications() {
           </div>
 
           {/* section with the search results as tiles */}
-          <div className="border-2 border-p-button">
+          <div>
             {searchResults.map(result =>(
               <OrderNotification
                 key={result.id}
