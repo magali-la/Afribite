@@ -86,10 +86,18 @@ function Notifications() {
     setSearchResults(resultsList);
   };
 
-  // function that handles clearing the search
+  // function that handles clearing the search by reseting the states
   const clearSearch = () => {
     console.log(`Search for '${searchTerm}' clearing.`);
 
+    // closes the conditional render of the search
+    setIsSearching(false);
+
+    // clears the stored matched orders
+    setSearchResults([]);
+    
+    // clears the search term
+    setSearchTerm('');
   };
 
   return (
