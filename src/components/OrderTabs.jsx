@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import OrderNotification from './OrderNotification';
 
-const OrderTabs = ({orders, refreshOrders}) => {
+const OrderTabs = ({orders, refreshOrders, isSearching, handleSearch}) => {
     console.log("Orders received in OrderTabs:", orders);
 
     const [activeTab, setActiveTab] = useState(0);
@@ -23,6 +23,8 @@ const OrderTabs = ({orders, refreshOrders}) => {
                     deliveryTime={order.deliveryTime}
                     orderNumber={order.orderNumber}
                     refreshOrders={refreshOrders}
+                    isSearching={isSearching}
+                    handleSearch={handleSearch}
                 />
             ) ),
             
@@ -44,6 +46,8 @@ const OrderTabs = ({orders, refreshOrders}) => {
                     deliveryTime={order.deliveryTime}
                     orderNumber={order.orderNumber}
                     refreshOrders={refreshOrders}
+                    isSearching={isSearching}
+                    handleSearch={handleSearch}
                 />
             ) ),
             
@@ -65,6 +69,8 @@ const OrderTabs = ({orders, refreshOrders}) => {
                     deliveryTime={order.deliveryTime}
                     orderNumber={order.orderNumber}
                     refreshOrders={refreshOrders}
+                    isSearching={isSearching}
+                    handleSearch={handleSearch}
                 />
             )),
         },
@@ -85,6 +91,8 @@ const OrderTabs = ({orders, refreshOrders}) => {
                         deliveryTime={order.deliveryTime}
                         orderNumber={order.orderNumber}
                         refreshOrders={refreshOrders}
+                        isSearching={isSearching}
+                        handleSearch={handleSearch}
                     />
                 )),
         },
@@ -105,6 +113,8 @@ const OrderTabs = ({orders, refreshOrders}) => {
                         deliveryTime={order.deliveryTime}
                         orderNumber={order.orderNumber}
                         refreshOrders={refreshOrders}
+                        isSearching={isSearching}
+                        handleSearch={handleSearch}
                     />
                 )),
         },

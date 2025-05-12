@@ -5,7 +5,7 @@ import Button from './button.jsx';
 import OrderPopup from './OrderPopup.jsx';
 
 
-const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName, orderQuantity, orderPrice, deliveryTime, orderNumber, refreshOrders}) => {
+const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName, orderQuantity, orderPrice, deliveryTime, orderNumber, refreshOrders, isSearching, handleSearch}) => {
     const [popupOpen, setPopupOpen] = useState(false)
 
     const toggleOrderPopup = () => {
@@ -124,6 +124,8 @@ const OrderNotification = ({id, orderStatus, orderTime, customerName, orderName,
                             orderStatus={orderStatus}
                             deliveryTime={deliveryTime}
                             refreshOrders={refreshOrders}
+                            isSearching={isSearching}
+                            handleSearch={handleSearch}
                         />
                 )}
             </div>

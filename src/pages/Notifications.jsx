@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { getFirestore, collection, query, where, or, getDocs} from "@firebase/firestore";
 import OrderSearch from "../components/OrderSearch.jsx";
 import OrderTabs from "../components/OrderTabs.jsx";
+import Button from "../components/button.jsx";
+import OrderNotification from "../components/OrderNotification.jsx";
 
 function Notifications() {
   const [orders, setOrders] = useState([]);
@@ -86,6 +88,7 @@ function Notifications() {
 
   // function that handles clearing the search
   const clearSearch = () => {
+    console.log(`Search for '${searchTerm}' clearing.`);
 
   };
 
@@ -101,11 +104,54 @@ function Notifications() {
           />
         </div>
       </div>
+
+      {/* conditional render of search results */}
+      {isSearching && (
+        <div className="border-2 border-p-button3 w-full h-[30%]">
+          {/* section with header and clear button */}
+          <div className="flex flex-row justify-between">
+            <h3 className="text-xl text-left mr-4 text-p-button3">Search results for: <span className="italic font-light">'{searchTerm}'</span></h3>
+            {/* button section */}
+            <div>
+              <Button 
+                text="Clear Search"
+                className="text-xs hover:font-medium py-0.5"
+                onClick={() => clearSearch()}
+              />
+            </div>
+          </div>
+
+          {/* section with the search results as tiles */}
+          <div className="border-2 border-p-button">
+            {searchResults.map(result =>(
+              <OrderNotification
+                key={result.id}
+                id={result.id}
+                orderStatus={result.orderStatus}
+                orderTime={result.orderTime}
+                customerName={result.customerName}
+                orderName={result.orderName}
+                orderQuantity={result.orderQuantity}
+                orderPrice={result.orderPrice}
+                deliveryTime={result.deliveryTime}
+                orderNumber={result.orderNumber}
+                refreshOrders={getOrderData}
+                isSearching={isSearching}
+                handleSearch={handleSearch}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* tabs and notificatons */}
       <div className="w-full flex-grow">
         <OrderTabs 
           orders={orders} 
-          refreshOrders={getOrderData}/>
+          refreshOrders={getOrderData}
+          isSearching={isSearching}
+          handleSearch={handleSearch}
+        />
       </div>
     </div>
   );
