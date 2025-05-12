@@ -131,7 +131,14 @@ function Notifications() {
 
           {/* section with the search results as tiles */}
           <div>
-            {searchResults.map(result =>(
+            {searchResults.length == 0 ?
+            (
+              <div>
+                <p className="italic font-light text-[16px] text-n-n1">No results found for <span className="font-extralight">'{searchTerm}'</span></p>
+              </div>
+            )
+            : (
+              searchResults.map(result =>(
               <OrderNotification
                 key={result.id}
                 id={result.id}
@@ -146,8 +153,8 @@ function Notifications() {
                 refreshOrders={getOrderData}
                 isSearching={isSearching}
                 handleSearch={handleSearch}
-              />
-            ))}
+              />))
+            )}
           </div>
         </div>
       )}
