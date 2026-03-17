@@ -3,7 +3,7 @@ import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase"; 
 import Button from "./button";
 
-const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, deliveryTime, refreshOrders, isSearching, handleSearch}) => {
+const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, orderPrice, popupOpen, toggleOrderPopup, orderStatus, deliveryTime, isSearching, handleSearch}) => {
 
     // this handles the order status change through firestore
     const advanceOrderStatus = async (newStatus) => {
@@ -35,8 +35,6 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
 
         // close the popup
         toggleOrderPopup();
-        // refresh the orders data to immediately update UI
-        refreshOrders();
 
         // set condition to refresh search results if an open result's status changes
         if (isSearching == true){
@@ -74,8 +72,6 @@ const OrderPopup = ({id, customerName, orderName, orderNumber, orderQuantity, or
 
         // close the popup
         toggleOrderPopup();
-        // refresh the orders data to immediately update UI
-        refreshOrders();
 
         // set condition to refresh search results if an open result's status changes
         if (isSearching == true){

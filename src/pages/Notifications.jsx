@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getFirestore, collection, query, where, or, getDocs} from "@firebase/firestore";
+import { getFirestore, collection, query, where, or, getDocs, onSnapshot} from "@firebase/firestore";
 import OrderSearch from "../components/OrderSearch.jsx";
 import OrderTabs from "../components/OrderTabs.jsx";
 import Button from "../components/button.jsx";
@@ -16,24 +16,25 @@ function Notifications() {
   const db = getFirestore();
   const ordersRef = collection(db, "orders");
 
-  // function that fetches orders from Firestore
-  const getOrderData = async () => {
-    const ordersSnapshot = await getDocs(ordersRef);
-
-    // build an array with the orders data
-    const ordersList = ordersSnapshot.docs.map((doc) => ({   id:doc.id,
-      ...doc.data(),
-    }));
-
-    // sort the orders array descending by order number
-    ordersList.sort((a, b) => b.orderNumber - a.orderNumber); 
-
-    console.log("Fetched Orders:", ordersList);
-    setOrders(ordersList);
-  };
-
+  // useEffect needs to control the listener for changes to the order document and cleanup to stop listening
   useEffect(() => {
-    getOrderData();
+    // unsubscribe firestore function
+    const unsubscribe = onSnapshot(ordersRef, (snapshot) => {
+      // array to store in state, map through orders puts into object with id nd the doc data
+      const ordersList = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // sort the orders array descending by order number
+      ordersList.sort((a, b) => b.orderNumber - a.orderNumber); 
+
+      console.log("Real-time order update:", ordersList);
+      setOrders(ordersList);
+    })
+
+    // cleanup to stop listening
+    return () => unsubscribe()
   }, []);
 
   console.log("orders before going to order tab:", orders);
@@ -150,7 +151,6 @@ function Notifications() {
                 orderPrice={result.orderPrice}
                 deliveryTime={result.deliveryTime}
                 orderNumber={result.orderNumber}
-                refreshOrders={getOrderData}
                 isSearching={isSearching}
                 handleSearch={handleSearch}
               />))
@@ -163,7 +163,6 @@ function Notifications() {
       <div className="w-full flex-grow">
         <OrderTabs 
           orders={orders} 
-          refreshOrders={getOrderData}
           isSearching={isSearching}
           handleSearch={handleSearch}
         />
